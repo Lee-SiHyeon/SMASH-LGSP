@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="description" content="마곡 LG사이언스파크를 3D로 부수는 스트레스 해소 게임. 사직서 폭탄, 결재판 풀스윙, 엑셀 레이저, 성과급 운석, 월요병 지진, 퇴사 핵폭탄.">
+<meta property="og:title" content="LG사이언스파크 부수기 — 정신나간 직장인의 회사 부수기 #1">
+<meta property="og:description" content="월요일 아침, 회사를 부숴 버렸다">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lee-sihyeon.github.io/SMASH-LGSP/">
+<meta property="og:image" content="https://lee-sihyeon.github.io/SMASH-LGSP/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>회사 부수기</title>
+<style>
+:root{--bg:#0d1118;--panel:rgba(16,21,30,.78);--line:rgba(255,255,255,.12);--fg:#f2f5f9;--muted:#9aa6b6;--accent:#ff6a2b;--accent2:#21d07a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:none}
+#stage{position:fixed;inset:0;width:100%;height:100%;display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#left{position:fixed;left:16px;top:16px;width:236px;display:flex;flex-direction:column;gap:10px;z-index:5}
+#brand{padding:12px 14px}
+#series{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+#title{font-size:21px;font-weight:900;margin-top:2px;letter-spacing:-.02em}
+#dock{padding:6px;display:flex;flex-direction:column;gap:4px}
+.tool{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left}
+.tool:hover{background:rgba(255,255,255,.06)}
+.tool.on{background:rgba(255,106,43,.18);border-color:var(--accent)}
+.tool .ic{width:22px;height:22px;flex:none}
+.tool .nm{flex:1}
+.tool kbd{font:500 11px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+#sliderWrap{padding:10px 12px}
+#sliderWrap .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+#sliderVal{color:var(--fg);font-weight:700}
+input[type=range]{width:100%;accent-color:var(--accent)}
+#tip{font-size:12px;color:#e6ebf1;padding:8px 12px;line-height:1.45;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+#right{position:fixed;right:16px;top:16px;width:218px;padding:12px 14px;z-index:5}
+#h-score{font-size:30px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rankrow{display:flex;align-items:center;gap:8px;margin:6px 0 4px}
+#h-rank{padding:3px 10px;border-radius:999px;font-weight:800;font-size:14px;color:#fff;transition:background .3s}
+#h-mult{font-weight:700;color:var(--muted);font-size:13px}
+.barw{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin-bottom:10px}
+#h-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#ffd166);transition:width .15s}
+.stat{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--muted)}
+.stat b{color:var(--fg);font-variant-numeric:tabular-nums}
+#bottom{position:fixed;right:16px;bottom:16px;display:flex;gap:8px;z-index:5}
+.btn{background:var(--panel);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:9px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;backdrop-filter:blur(8px)}
+.btn:hover{border-color:rgba(255,255,255,.3)}
+.btn.on{border-color:var(--accent);color:#ffd2bf}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+#credit{position:fixed;left:16px;bottom:10px;font-size:11px;color:rgba(255,255,255,.55);z-index:4;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+#toast{position:fixed;left:50%;top:22px;transform:translate(-50%,-10px);padding:10px 18px;border-radius:999px;background:rgba(10,14,22,.85);border:1px solid var(--line);font-weight:800;font-size:16px;opacity:0;transition:.25s;z-index:8;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#floaters{position:fixed;inset:0;pointer-events:none;z-index:6;overflow:hidden}
+.float{position:absolute;left:0;top:0;font-weight:900;font-size:17px;white-space:nowrap;text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 10px rgba(0,0,0,.4);will-change:transform}
+#flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:7}
+#start{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 40%,rgba(30,20,14,.55),rgba(8,10,16,.92));transition:opacity .5s}
+#start.gone{opacity:0;pointer-events:none}
+.startbox{text-align:center;padding:0 16px;max-width:560px}
+#startSeries{color:var(--accent);font-weight:800;font-size:14px}
+#startTitle{font-size:clamp(38px,9vw,72px);font-weight:900;letter-spacing:-.04em;margin:8px 0 6px;line-height:1.05}
+#startTag{color:#d5dbe3;font-size:17px;margin-bottom:26px}
+#startBtn{font-size:19px;padding:14px 34px;border-radius:14px}
+.how{margin-top:22px;color:var(--muted);font-size:13px;line-height:1.7}
+#cardModal{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(0,0,0,.7);padding:16px}
+#cardModal[hidden]{display:none}
+#cardModal .box{max-width:760px;width:100%;padding:14px}
+#cardImg{width:100%;border-radius:10px;display:block}
+#cardModal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;align-items:center}
+#cardModal .row span{flex:1;font-size:12px;color:var(--muted)}
+@media (max-width:760px){
+  #left{left:0;right:0;top:auto;bottom:0;width:auto;gap:6px;padding:0 8px calc(8px + env(safe-area-inset-bottom))}
+  #brand{position:fixed;left:10px;top:10px;padding:8px 10px}
+  #title{font-size:16px}#series{font-size:10px}
+  #dock{flex-direction:row;overflow-x:auto;gap:4px}
+  .tool{flex-direction:column;gap:2px;padding:6px 4px;min-width:62px;font-size:11px;text-align:center}
+  .tool kbd{display:none}
+  #tip{display:none}
+  #right{top:10px;right:10px;width:150px;padding:8px 10px}
+  #h-score{font-size:20px}.stat{font-size:11px}
+  #bottom{top:auto;bottom:auto;right:10px;top:206px;flex-direction:column}
+  #bottom .btn{padding:7px 9px;font-size:12px}
+  #credit{display:none}
+  #toast{font-size:13px;top:auto;bottom:150px}
+}
+</style>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<div id="left">
+  <div id="brand" class="panel"><div id="series"></div><div id="title"></div></div>
+  <div id="dock" class="panel"></div>
+  <div id="sliderWrap" class="panel" hidden><div class="row"><span id="sliderLabel"></span><span id="sliderVal"></span></div><input id="slider" type="range"></div>
+  <div id="tip"></div>
+</div>
+<div id="right" class="panel">
+  <div id="h-score">0</div>
+  <div class="rankrow"><span id="h-rank">인턴</span><span id="h-mult">×1.00</span></div>
+  <div class="barw"><div id="h-bar"></div></div>
+  <div class="stat"><span>회사 파괴율</span><b id="h-rate">0%</b></div>
+  <div class="stat"><span>무너진 건물</span><b id="h-cnt">0</b></div>
+  <div class="stat"><span>판 깊이</span><b id="h-depth">0 km</b></div>
+</div>
+<div id="bottom">
+  <button class="btn" id="nightBtn" title="밤 (N)">밤</button>
+  <button class="btn" id="muteBtn" title="소리 (M)">소리</button>
+  <button class="btn" id="resetBtn">처음부터</button>
+  <button class="btn primary" id="cardBtn">인증샷</button>
+</div>
+<div id="credit"></div>
+<div id="floaters"></div>
+<div id="toast"></div>
+<div id="flash"></div>
+<div id="cardModal" hidden><div class="box panel"><img id="cardImg" alt="결과 카드"><div class="row"><span>저장이 안 되면 이미지를 길게 누르거나 오른쪽 클릭해서 저장하세요</span><a class="btn" id="cardDl" download="smash-result.png">저장</a><button class="btn" id="cardClose">닫기</button></div></div></div>
+<div id="start"><div class="startbox">
+  <div id="startSeries"></div><div id="startTitle"></div><div id="startTag"></div>
+  <button class="btn primary" id="startBtn">출근하기</button>
+  <div class="how">건물을 눌러 부수기 · 끌어서 회전 · 휠/두 손가락 확대<br>도구를 바꿔 가며 부수면 배율이 붙고 직급이 오릅니다</div>
+</div></div>
+<script id="config-data" type="application/json">/*CONFIG*/</script>
+<script id="scene-data" type="application/json">/*SCENE*/</script>
+<script>/*BUNDLE*/</script>
+</body>
+</html>
