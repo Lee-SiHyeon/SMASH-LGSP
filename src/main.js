@@ -1202,12 +1202,12 @@ function detonate(P) {
 // ───────────────────────── UI ─────────────────────────
 const $ = (id) => document.getElementById(id);
 const TOOLS = [
-  { id: 'bomb', svg: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 8l9 6 9-6"/>', name: '사직서 폭탄', icon: '✉️', tip: '누른 곳에 사직서를 던져 넓게 날리고 구덩이를 팝니다' },
-  { id: 'bat', svg: '<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M8 10h8M8 14h5"/><circle cx="15.5" cy="16.5" r="2.2"/>', name: '결재판 풀스윙', icon: '📋', tip: '거대한 결재판으로 쳐서 덩어리를 멀리 날립니다. 70 m 넘으면 홈런', slider: { label: '결재판 크기', min: 0.5, max: 3, step: 0.1, get: () => batScale, set: (v) => (batScale = v), fmt: (v) => `×${v.toFixed(1)} · ${Math.round(36 * v)} m` } },
-  { id: 'laser', svg: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>', name: '엑셀 레이저', icon: '📊', tip: '끌어서 선을 그으면 빔이 그 선을 훑습니다. 톡 누르면 한 점만' },
-  { id: 'meteor', svg: '<circle cx="15" cy="15" r="5"/><path d="M3 3l8 8M7 3l6 6M3 7l6 6"/>', name: '성과급 운석', icon: '☄️', tip: '하늘에서 운석이 떨어져 큰 구덩이를 만듭니다' },
-  { id: 'quake', svg: '<path d="M2 13h4l2-6 3 11 3-9 2 4h6"/>', name: '월요병 지진', icon: '🌋', tip: '누른 곳이 진원. 규모 8 이상이면 건물이 통째로 주저앉습니다', slider: { label: '규모', min: 4, max: 10, step: 0.1, get: () => quakeM, set: (v) => (quakeM = v), fmt: (v) => `M ${v.toFixed(1)} · ${v < 6 ? '흔들림' : v < 8 ? '부분 붕괴' : '전면 붕괴'}` } },
-  { id: 'nuke', svg: '<circle cx="12" cy="12" r="2"/><path d="M12 10L8.5 4a8 8 0 0 1 7 0zM13.7 13l3.5 6a8 8 0 0 0 3.5-6zM10.3 13l-3.5 6a8 8 0 0 1-3.5-6z" fill="currentColor"/>', name: '퇴사 핵폭탄', icon: '☢️', tip: '반경 420 m를 통째로 날립니다' },
+  { id: 'bomb', short: '사직서', svg: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 8l9 6 9-6"/>', name: '사직서 폭탄', icon: '✉️', tip: '누른 곳에 사직서를 던져 넓게 날리고 구덩이를 팝니다' },
+  { id: 'bat', short: '결재판', svg: '<rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M8 10h8M8 14h5"/><circle cx="15.5" cy="16.5" r="2.2"/>', name: '결재판 풀스윙', icon: '📋', tip: '거대한 결재판으로 쳐서 덩어리를 멀리 날립니다. 70 m 넘으면 홈런', slider: { label: '결재판 크기', min: 0.5, max: 3, step: 0.1, get: () => batScale, set: (v) => (batScale = v), fmt: (v) => `×${v.toFixed(1)} · ${Math.round(36 * v)} m` } },
+  { id: 'laser', short: '레이저', svg: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>', name: '엑셀 레이저', icon: '📊', tip: '끌어서 선을 그으면 빔이 그 선을 훑습니다. 톡 누르면 한 점만' },
+  { id: 'meteor', short: '운석', svg: '<circle cx="15" cy="15" r="5"/><path d="M3 3l8 8M7 3l6 6M3 7l6 6"/>', name: '성과급 운석', icon: '☄️', tip: '하늘에서 운석이 떨어져 큰 구덩이를 만듭니다' },
+  { id: 'quake', short: '지진', svg: '<path d="M2 13h4l2-6 3 11 3-9 2 4h6"/>', name: '월요병 지진', icon: '🌋', tip: '누른 곳이 진원. 규모 8 이상이면 건물이 통째로 주저앉습니다', slider: { label: '규모', min: 4, max: 10, step: 0.1, get: () => quakeM, set: (v) => (quakeM = v), fmt: (v) => `M ${v.toFixed(1)} · ${v < 6 ? '흔들림' : v < 8 ? '부분 붕괴' : '전면 붕괴'}` } },
+  { id: 'nuke', short: '핵폭탄', svg: '<circle cx="12" cy="12" r="2"/><path d="M12 10L8.5 4a8 8 0 0 1 7 0zM13.7 13l3.5 6a8 8 0 0 0 3.5-6zM10.3 13l-3.5 6a8 8 0 0 1-3.5-6z" fill="currentColor"/>', name: '퇴사 핵폭탄', icon: '☢️', tip: '반경 420 m를 통째로 날립니다' },
 ];
 let tool = 'bomb';
 function buildDock() {
@@ -1215,7 +1215,7 @@ function buildDock() {
   TOOLS.forEach((t, i) => {
     const b = document.createElement('button');
     b.className = 'tool'; b.dataset.id = t.id; b.title = t.tip;
-    b.innerHTML = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${t.svg}</svg><span class="nm">${t.name}</span><kbd>${i + 1}</kbd>`;
+    b.innerHTML = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${t.svg}</svg><span class="nm">${t.name}</span><span class="sh">${t.short}</span><kbd>${i + 1}</kbd>`;
     b.onclick = () => selectTool(t.id);
     dock.appendChild(b);
   });

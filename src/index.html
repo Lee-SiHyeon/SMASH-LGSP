@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%23ff6a2b%22/%3E%3Cpath d=%22M8 24V12l4-3v15M14 24V7l5 3v14M21 24V14l3 2v8%22 stroke=%22white%22 stroke-width=%222%22 fill=%22none%22/%3E%3C/svg%3E">
 <meta name="description" content="마곡 LG사이언스파크를 3D로 부수는 스트레스 해소 게임. 사직서 폭탄, 결재판 풀스윙, 엑셀 레이저, 성과급 운석, 월요병 지진, 퇴사 핵폭탄.">
 <meta property="og:title" content="LG사이언스파크 부수기 — 정신나간 직장인의 회사 부수기 #1">
 <meta property="og:description" content="월요일 아침, 회사를 부숴 버렸다">
@@ -26,7 +27,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 .tool:hover{background:rgba(255,255,255,.06)}
 .tool.on{background:rgba(255,106,43,.18);border-color:var(--accent)}
 .tool .ic{width:22px;height:22px;flex:none}
-.tool .nm{flex:1}
+.tool .nm{flex:1}.tool .sh{display:none}
 .tool kbd{font:500 11px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
 #sliderWrap{padding:10px 12px}
 #sliderWrap .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
@@ -73,7 +74,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   #title{font-size:16px}#series{font-size:10px}
   #dock{flex-direction:row;overflow-x:auto;gap:4px}
   .tool{flex-direction:column;gap:2px;padding:6px 4px;min-width:62px;font-size:11px;text-align:center}
-  .tool kbd{display:none}
+  .tool kbd,.tool .nm{display:none}.tool .sh{display:block;white-space:nowrap}
+  .tool{min-width:0;flex:1}
   #tip{display:none}
   #right{top:10px;right:10px;width:150px;padding:8px 10px}
   #h-score{font-size:20px}.stat{font-size:11px}
